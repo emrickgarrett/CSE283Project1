@@ -1,0 +1,42 @@
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.net.InetAddress;
+import java.net.Socket;
+import java.util.Scanner;
+
+
+public class BattleshipClient {
+	
+	
+	Socket server;
+	DataOutputStream dos = null;
+	DataInputStream dis = null;
+	InetAddress sIP = null;
+	
+	public BattleshipClient(){
+		
+		getServerIP();
+		
+	}
+	
+	private void getServerIP(){
+		
+		Scanner scan = new Scanner(System.in);
+		
+		System.out.print("Please enter the server's IP address: ");
+		
+		sIP = InetAddress.getByName(scan.next()+ "");
+		
+		System.out.println();
+		
+		
+		
+		
+	}
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		new BattleshipClient();
+	}
+
+}

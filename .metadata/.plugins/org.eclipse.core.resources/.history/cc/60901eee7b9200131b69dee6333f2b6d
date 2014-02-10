@@ -41,6 +41,7 @@ public class BattleshipServer {
 		
 	}
 	
+	
 	//Enum for MoveStatus
 	private enum MoveStatus{
 		
@@ -55,9 +56,6 @@ public class BattleshipServer {
 		}
 		
 	}
-	
-	
-	
 	
 	public BattleshipServer(){
 		

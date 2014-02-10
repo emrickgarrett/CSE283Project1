@@ -24,29 +24,15 @@ public class BattleshipClient {
 	
 	private void createStreams(){
 		
-		try {
-			dos = new DataOutputStream(server.getOutputStream());
-		} catch (IOException e1) {
-			System.err.println("Error creating Output Stream");
-			e1.printStackTrace();
-		}
-		
-		
-		try {
-			dis = new DataInputStream(server.getInputStream());
-		} catch (IOException e) {
-			System.err.println("Error creating Input Stream");
-			e.printStackTrace();
-		}
 		
 	}
 	
-	private void establishConnection(){
+	private void establishConnection(){\
 		
 		try {
 			server = new Socket(sIP, BattleshipServer.PORT);
 		} catch (IOException e) {
-			System.err.println("Error Creating Socket for the Server");
+			System.err.println("Error Connecting to the Server");
 			e.printStackTrace();
 		}
 	}

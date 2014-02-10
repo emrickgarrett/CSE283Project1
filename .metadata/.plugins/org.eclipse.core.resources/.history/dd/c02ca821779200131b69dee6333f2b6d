@@ -1,0 +1,20 @@
+
+public class BattleshipClient {
+	
+	
+	Socket server;
+	DataOutputStream dos = null;
+	DataInputStream dis = null;
+	InetAddress sIP = "127.0.0.1";
+	final static int PORT = BattleshipServer.PORT;
+	
+	public BattleshipClient(){
+		
+	}
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		new BattleshipClient();
+	}
+
+}

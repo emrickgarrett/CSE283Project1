@@ -24,20 +24,11 @@ public class BattleshipClient {
 	
 	private void createStreams(){
 		
-		try {
-			dos = new DataOutputStream(server.getOutputStream());
-		} catch (IOException e1) {
-			System.err.println("Error creating Output Stream");
-			e1.printStackTrace();
-		}
+		dos = new DataOutputStream(server.getOutputStream());
 		
 		
-		try {
-			dis = new DataInputStream(server.getInputStream());
-		} catch (IOException e) {
-			System.err.println("Error creating Input Stream");
-			e.printStackTrace();
-		}
+		
+		dis = new DataInputStream(server.getInputStream());
 		
 	}
 	

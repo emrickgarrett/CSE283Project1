@@ -1,6 +1,5 @@
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
-import java.io.IOException;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
@@ -18,37 +17,7 @@ public class BattleshipClient {
 	public BattleshipClient(){
 		
 		getServerIP();
-		establishConnection();
-		createStreams();
-	}
-	
-	private void createStreams(){
 		
-		try {
-			dos = new DataOutputStream(server.getOutputStream());
-		} catch (IOException e1) {
-			System.err.println("Error creating Output Stream");
-			e1.printStackTrace();
-		}
-		
-		
-		try {
-			dis = new DataInputStream(server.getInputStream());
-		} catch (IOException e) {
-			System.err.println("Error creating Input Stream");
-			e.printStackTrace();
-		}
-		
-	}
-	
-	private void establishConnection(){
-		
-		try {
-			server = new Socket(sIP, BattleshipServer.PORT);
-		} catch (IOException e) {
-			System.err.println("Error Creating Socket for the Server");
-			e.printStackTrace();
-		}
 	}
 	
 	private void getServerIP(){
@@ -64,9 +33,11 @@ public class BattleshipClient {
 			e.printStackTrace();
 		}
 		
-		scan.close();
-		
 		System.out.println();
+		
+		
+		
+		
 	}
 
 	public static void main(String[] args) {
