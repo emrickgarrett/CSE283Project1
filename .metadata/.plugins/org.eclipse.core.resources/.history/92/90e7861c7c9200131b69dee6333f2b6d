@@ -23,7 +23,7 @@ public class BattleshipServer {
 	//Defines the Board size and board creation
 	private int row = 10;
 	private int col = 10;
-	private int[] board = new int[row*col];
+	private int[][] board = new int[row][col];
 	
 	
 	//Enum for GameStatus
@@ -64,48 +64,6 @@ public class BattleshipServer {
 		initServerSocket();
 		printServerInfo();
 		gameLoop();
-		
-	}
-	
-	private void gameLoop(){
-		
-		while(true){
-			
-			initGameBoard();
-			listenForClient();
-			createStreams();
-			
-			
-			//Loop for playing the game!
-			while(true){
-				
-				
-				
-			}
-		}
-		
-	}
-	
-	private void listenForClient(){
-		
-		try {
-			client = serverSocket.accept();
-		} catch (IOException e) {
-			System.err.println("Error Accepting Socket Connection");
-			e.printStackTrace();
-		}
-		
-	}
-	
-	private void createStreams(){
-		
-	}
-	
-	private void initGameBoard(){
-		
-		for(int i = 0; i < row*col; i++){
-			board[i] = 0;
-		}
 		
 	}
 	

@@ -70,16 +70,12 @@ public class BattleshipServer {
 	private void gameLoop(){
 		
 		while(true){
-			
 			initGameBoard();
-			listenForClient();
-			createStreams();
 			
-			
-			//Loop for playing the game!
 			while(true){
 				
-				
+				listenForClient();
+				createStreams();
 				
 			}
 		}
@@ -104,7 +100,7 @@ public class BattleshipServer {
 	private void initGameBoard(){
 		
 		for(int i = 0; i < row*col; i++){
-			board[i] = 0;
+			board[i] = "_";
 		}
 		
 	}
