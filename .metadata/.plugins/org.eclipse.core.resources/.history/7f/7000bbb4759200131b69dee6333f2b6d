@@ -1,0 +1,14 @@
+
+public class BattleshipServer {
+	
+	public BattleshipServer(){
+		
+	}
+
+	public static void main(String[] args) {
+		
+		new BattleshipServer();
+
+	}
+
+}

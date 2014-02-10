@@ -1,0 +1,30 @@
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
+
+
+public class BattleshipServer {
+	
+	ServerSocket socket;
+	Socket client;
+	final int PORT = 31500;
+	
+	public BattleshipServer(){
+		
+		//Init the server socket
+		try {
+			socket = new ServerSocket(PORT);
+		} catch (IOException e) {
+			System.err.println("Error Creating Server Socket");
+			e.printStackTrace();
+		}
+		
+	}
+
+	public static void main(String[] args) {
+		
+		new BattleshipServer();
+
+	}
+
+}

@@ -1,0 +1,18 @@
+
+public class BattleshipServer {
+	
+	ServerSocket socket;
+	Socket client;
+	final int PORT = 31500;
+	
+	public BattleshipServer(){
+		
+	}
+
+	public static void main(String[] args) {
+		
+		new BattleshipServer();
+
+	}
+
+}
