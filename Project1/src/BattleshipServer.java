@@ -15,6 +15,7 @@ public class BattleshipServer {
 	final static int PORT = 32100;
 	DataOutputStream dos = null;
 	DataInputStream dis = null;
+	boolean inProgress = true;
 	
 	//Game Variables
 	private int maxGuesses = 25;
@@ -27,7 +28,7 @@ public class BattleshipServer {
 	
 	
 	//Enum for GameStatus
-	private enum GameStatus{
+	public enum GameStatus{
 		
 		CONTINUE(10),
 		CLIENT_WON(20),
@@ -42,7 +43,7 @@ public class BattleshipServer {
 	}
 	
 	//Enum for MoveStatus
-	private enum MoveStatus{
+	public enum MoveStatus{
 		
 		MISS(10),
 		HIT(20),
@@ -77,13 +78,31 @@ public class BattleshipServer {
 			
 			
 			//Loop for playing the game!
-			while(true){
+			while(inProgress){
 				
 				
 				
 			}
+			closeStreams();
+			inProgress = true;
 		}
 		
+	}
+	
+	private void closeStreams(){
+		
+		try{
+			dos.close();
+			dis.close();
+			client.close();
+		}catch(IOException ex){
+			System.err.println("Error closing your streams");
+			ex.printStackTrace();
+		}
+		
+		dos = null;
+		dis = null;
+		client = null;
 	}
 	
 	private void listenForClient(){
@@ -99,6 +118,13 @@ public class BattleshipServer {
 	
 	private void createStreams(){
 		
+		try{
+		dos = new DataOutputStream(client.getOutputStream());
+		dis = new DataInputStream(client.getInputStream());
+		}catch(IOException ex){
+			System.err.println("Error creating Input/Output Streams");
+			ex.printStackTrace();
+		}
 	}
 	
 	private void initGameBoard(){
@@ -130,6 +156,28 @@ public class BattleshipServer {
 		} catch (IOException e) {
 			System.err.println("Error Creating Server Socket");
 			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * 
+	 * Method to store result, main reason is to "remind" one of the numbers/meanings.
+	 * Not necessary to use as we have access to the board
+	 * 
+	 * @param x : X location
+	 * @param y : Y location
+	 * @param result : Result to store (0 = Blank, 1 = Hit, 2 = Miss)
+	 */
+	private void storeResult(int x, int y, int result){
+		board[row * x + y] = result;
+	}
+	
+	private String getResult(int x, int y){
+		switch(board[row * x + y]){
+		case 0 : return "_";
+		case 1 : return "H";
+		case 2 : return "M";
+		default: return "_";
 		}
 	}
 
