@@ -35,7 +35,7 @@ public class BattleshipServer {
 		CLIENT_LOST(30),
 		ILLEGAL_MOVE(40);
 		
-		int id;
+		final int id;
 		GameStatus(int id){
 			this.id = id;
 		}
@@ -50,7 +50,7 @@ public class BattleshipServer {
 		SINK(30),
 		ILLEGAL_MOVE(40);
 		
-		int id;
+		final int id;
 		MoveStatus(int id){
 			this.id = id;
 		}

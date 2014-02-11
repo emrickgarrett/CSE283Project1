@@ -26,7 +26,35 @@ public class BattleshipClient {
 	//Scanner to get user input
 	Scanner scan;
 	
+	//Enum for GameStatus
+	public enum GameStatus{
+		
+		CONTINUE(10),
+		CLIENT_WON(20),
+		CLIENT_LOST(30),
+		ILLEGAL_MOVE(40);
+		
+		final int id;
+		GameStatus(int id){
+			this.id = id;
+		}
+		
+	}
 	
+	//Enum for MoveStatus
+	public enum MoveStatus{
+		
+		MISS(10),
+		HIT(20),
+		SINK(30),
+		ILLEGAL_MOVE(40);
+		
+		final int id;
+		MoveStatus(int id){
+			this.id = id;
+		}
+		
+	}
 	
 	
 	public BattleshipClient(){
