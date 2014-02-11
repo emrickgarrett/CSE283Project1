@@ -56,7 +56,9 @@ public class BattleshipClient {
 		
 	}
 	
-	
+	/**
+	 * Constructor for the BattleShipClient, contains the Game Loop.
+	 */
 	public BattleshipClient(){
 		
 		//Scanner is initialized in getServerIp
@@ -69,7 +71,6 @@ public class BattleshipClient {
 		while(inProgress){
 			printBoard();
 			getTurn();
-			while(true);
 		}
 		
 		closeStreams();
@@ -111,6 +112,9 @@ public class BattleshipClient {
 		
 	}
 	
+	/**
+	 * Simulate a turn for the user, get a guess and then print out the board
+	 */
 	private void getTurn(){
 		System.out.println("‘M’ indicates “miss.” ‘H’ indicates “hit.” " +
 				"Enter your Move (enter negative number to quit)");
@@ -130,6 +134,11 @@ public class BattleshipClient {
 		getResponse(t_row, t_col);
 	}
 	
+	/**
+	 * Send the users guess to the server
+	 * @param x : X coordinate
+	 * @param y : Y coordinate
+	 */
 	private void sendGuess(int x, int y){
 		
 		try{
@@ -140,6 +149,11 @@ public class BattleshipClient {
 		}
 	}
 	
+	/**
+	 * Get the response from the server based on the user guess
+	 * @param t_row : The row the user guessed
+	 * @param t_col : The col the user guessed
+	 */
 	private void getResponse(int t_row, int t_col){
 		int moveStatus = 0;
 		int gameStatus = 0;
@@ -152,6 +166,7 @@ public class BattleshipClient {
 			ex.printStackTrace();
 		}
 		
+		//Determine what the response from the server was for the move
 		switch(moveStatus){
 		case 10: 
 			board[row*t_row + t_col] = 2;
@@ -167,6 +182,8 @@ public class BattleshipClient {
 			break;
 		}
 		
+		
+		//Determine what the response was from the server for the Game Status
 		switch(gameStatus){
 		case 10:
 			//Continue
@@ -188,7 +205,7 @@ public class BattleshipClient {
 	 */
 	private void quitGame(){
 		System.out.println("Thank you for playing, Come again!");
-		System.exit(0);
+		inProgress = false;
 	}
 	
 	

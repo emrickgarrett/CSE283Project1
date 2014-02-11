@@ -79,14 +79,41 @@ public class BattleshipServer {
 			
 			//Loop for playing the game!
 			while(inProgress){
-				
-				
-				
+				listenForGuess();
 			}
 			closeStreams();
 			inProgress = true;
 		}
 		
+	}
+	
+	private void listenForGuess(){
+		
+		int guess = -1;
+		
+		try{
+			guess = dis.readInt();
+		}catch(Exception ex){
+			System.err.println("Error reading in the Guess!");
+			ex.printStackTrace();
+		}
+		
+		if(guess >= 100 || guess < 0){
+			sendResponse(MoveStatus.ILLEGAL_MOVE.id, GameStatus.ILLEGAL_MOVE.id);
+			inProgress = false;
+		}
+		
+	}
+	
+	private void sendResponse(int moveStatus, int gameStatus){
+		
+		try{
+			dos.writeInt(moveStatus);
+			dos.writeInt(gameStatus);
+		}catch(IOException ex){
+			System.err.println("Error sending the status");
+			ex.printStackTrace();
+		}
 	}
 	
 	private void closeStreams(){
