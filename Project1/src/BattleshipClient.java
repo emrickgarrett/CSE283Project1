@@ -83,10 +83,6 @@ public class BattleshipClient {
 	 */
 	private void printBoard(){
 		
-		board[row*2 + 2] = 1;
-		board[row*5 + 4] = 2;
-		board[row*7 + 9] = 2;
-		
 		for(int y = 0; y < col+1; y++){
 			for(int x = 0; x < row+1; x++){
 				if(x == 0 && y == 0){
@@ -187,6 +183,9 @@ public class BattleshipClient {
 		}
 	}
 	
+	/**
+	 * Display message to user and exit the game
+	 */
 	private void quitGame(){
 		System.out.println("Thank you for playing, Come again!");
 		System.exit(0);
@@ -195,7 +194,9 @@ public class BattleshipClient {
 	
 	/**************** Board Methods Below *********************/
 	
-	
+	/**
+	 * Initialize the board, should be done for every new game
+	 */
 	private void initBoard(){
 		board = new int[row*col];
 	}
@@ -213,6 +214,12 @@ public class BattleshipClient {
 		board[row * x + y] = result;
 	}
 	
+	/**
+	 * Get the result on a certain spot (not used)
+	 * @param x : X location
+	 * @param y : Y location
+	 * @return : The printable value for console, _, H (hit), M (miss)
+	 */
 	private String getResult(int x, int y){
 		switch(board[row * x + y]){
 		case 0 : return "_";
@@ -225,6 +232,9 @@ public class BattleshipClient {
 	
 	/********************** Networking Methods Below *********************/
 	
+	/**
+	 * Close all the streams: Socket, DataOut, DataIn, and also the Scanner
+	 */
 	private void closeStreams(){
 		try{
 			dos.close();
@@ -237,6 +247,9 @@ public class BattleshipClient {
 		}
 	}
 	
+	/**
+	 * Create the input/output streams with the server
+	 */
 	private void createStreams(){
 		
 		try {
@@ -256,6 +269,9 @@ public class BattleshipClient {
 		
 	}
 	
+	/**
+	 * Create the socket to connect with the server
+	 */
 	private void establishConnection(){
 		
 		try {
@@ -266,6 +282,9 @@ public class BattleshipClient {
 		}
 	}
 	
+	/**
+	 * Get the server IP from the user, and then use set that to the member variable sIP
+	 */
 	private void getServerIP(){
 		
 		scan = new Scanner(System.in);
@@ -282,6 +301,10 @@ public class BattleshipClient {
 		System.out.println();
 	}
 
+	/**
+	 * Main method for the class, creates new object
+	 * @param args
+	 */
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		new BattleshipClient();
