@@ -67,9 +67,9 @@ public class BattleshipClient {
 		createStreams();
 		initBoard();
 		
+		printBoard();
 		//Game Loop methods
 		while(inProgress){
-			printBoard();
 			getTurn();
 		}
 		
@@ -170,15 +170,21 @@ public class BattleshipClient {
 		switch(moveStatus){
 		case 10: 
 			board[row*t_row + t_col] = 2;
+			printBoard();
+			System.out.println("Miss!");
 			break;
 		case 20:
 			board[row*t_row + t_col] = 1;
+			printBoard();
+			System.out.println("Hit!");
 			break;
-		case 30: 
-			//Sink
+		case 30:
+			printBoard();
+			System.out.println("Sink!");
 			break;
 		case 40:
-			//Illegal Move
+			printBoard();
+			System.out.println("Illegal Move, Exiting!");
 			break;
 		}
 		
@@ -186,16 +192,21 @@ public class BattleshipClient {
 		//Determine what the response was from the server for the Game Status
 		switch(gameStatus){
 		case 10:
-			//Continue
+			//Continue, do nothing
 			break;
 		case 20:
 			//Game over, Player won
+			System.out.println("You have Won the Game! Exiting!");
+			inProgress = false;
 			break;
 		case 30:
 			//Game over, Player lost
+			System.out.println("You have Lost the Game! Exiting!");
+			inProgress = false;
 			break;
 		case 40:
 			//Illegal Move, you dun goofed
+			inProgress = false;
 			break;
 		}
 	}

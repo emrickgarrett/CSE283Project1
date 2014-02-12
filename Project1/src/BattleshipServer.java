@@ -5,6 +5,7 @@ import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.Random;
 
 
@@ -28,7 +29,8 @@ public class BattleshipServer {
 	boolean inProgress = true;
 	
 	//Game Variables
-	private int maxGuesses = 25;
+	private final int MAX_GUESSES = 25;
+	private int numGuesses = 0;
 	
 	
 	//Defines the Board size and board creation
@@ -90,13 +92,13 @@ public class BattleshipServer {
 		CRUISER(3),
 		DESTROYER(2);
 		
-		int locations[];
-		int hits[];
+		ArrayList<Integer> locations;
+		ArrayList<Integer> hits;
 		boolean sank;
 		
 		SHIP(int size){
-			this.locations = new int[size];
-			this.hits = new int[size];
+			this.locations = new ArrayList<Integer>();
+			this.hits = new ArrayList<Integer>();
 			this.sank = false;
 		}
 	}
@@ -133,6 +135,7 @@ public class BattleshipServer {
 			}
 			closeStreams();
 			inProgress = true;
+			numGuesses = 0;
 		}
 		
 	}
@@ -164,8 +167,8 @@ public class BattleshipServer {
 		
 		//The user made a guess that can be applied to the game!
 		else{
-			int y = guess/col;
-			int x = guess%row;
+			int x = guess/col;
+			int y = guess%row;
 			
 			registerHit(x, y);
 			
@@ -181,7 +184,65 @@ public class BattleshipServer {
 	 * @param y : The y location
 	 */
 	public void registerHit(int x, int y){
-		sendResponse(MoveStatus.HIT.id, GameStatus.CONTINUE.id);
+		
+		SHIP ship = null;
+		
+		
+		switch(board[x*row+y]){
+		case 4:
+			ship = SHIP.BATTLESHIP;
+			break;
+		case 3:
+			ship = SHIP.CRUISER;
+			break;
+		case 2:
+			ship = SHIP.DESTROYER;
+			break;
+		default:
+			sendResponse(MoveStatus.MISS.id, GameStatus.CONTINUE.id);
+			numGuesses++;
+			return;
+		}
+
+		if(ship.hits.contains(x*row+y)){
+			sendResponse(MoveStatus.ILLEGAL_MOVE.id,GameStatus.ILLEGAL_MOVE.id);
+			inProgress = false;
+		}else{
+			if(ship.locations.contains(x*row+y)){
+				//Ship was hit
+				ship.hits.add(x*row+y);
+				if(ship.hits.size() == ship.locations.size()){
+					ship.sank = true;
+					
+					if(SHIP.BATTLESHIP.sank && SHIP.CRUISER.sank && SHIP.DESTROYER.sank){
+						sendResponse(MoveStatus.HIT.id, GameStatus.CLIENT_WON.id);
+						numGuesses++;
+						inProgress = false;
+					}else{
+						numGuesses++;
+						
+						if(numGuesses >= 25){
+							sendResponse(MoveStatus.HIT.id, GameStatus.CLIENT_LOST.id);
+							inProgress = false;
+						}else{
+							sendResponse(MoveStatus.HIT.id, GameStatus.CONTINUE.id);
+						}
+					}
+				}else{
+					sendResponse(MoveStatus.HIT.id, GameStatus.CONTINUE.id);
+					numGuesses++;
+				}
+			}else{
+				numGuesses++;
+				if(numGuesses == 25){
+					sendResponse(MoveStatus.MISS.id, GameStatus.CLIENT_LOST.id);
+					inProgress = false;
+				}
+			}
+		}
+		
+		
+		
 	}
 	
 	/**
@@ -330,11 +391,11 @@ public class BattleshipServer {
 					switch(direction){
 					case 1: // Horizontal
 						board[(locationX+j)*row + locationY] = i;
-						ship.locations[j] = (locationX+j)*row + locationY;
+						ship.locations.add((locationX+j)*row + locationY);
 						break;
 					case 2: // Vertical
 						board[locationX*row + (locationY+j)] = i;
-						ship.locations[j] = locationX*row + (locationY+j);
+						ship.locations.add(locationX*row + (locationY+j));
 						break;
 					}
 			/** DEBUGGING **/
