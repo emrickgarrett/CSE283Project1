@@ -186,6 +186,16 @@ public class BattleshipServer {
 		placeShips();
 	}
 	
+	/**
+	 * 
+	 * Place the ships, can be easily modified to place more.
+	 * 
+	 * It first picks a random spot on the board, and then decides if it wants to place
+	 * it horizontally or vertically. It will then skim the board in that direction to see if
+	 * their is room, and if there is, place it. If it cannot place it there or there isn't room,
+	 * it will pick another random spot and restart.
+	 * 
+	 */
 	private void placeShips(){
 		//Need to place 3 ships (Destroyer, Battleship, and Cruiser?)
 		
