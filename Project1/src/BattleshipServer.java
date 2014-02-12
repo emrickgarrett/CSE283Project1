@@ -188,10 +188,26 @@ public class BattleshipServer {
 	
 	private void placeShips(){
 		//Need to place 3 ships (Destroyer, Battleship, and Cruiser?)
-		Random randSmall = new Random(2);
+		
+		for(int i = 4; i > 1; i--){
+			
+			int locationX = (int)(Math.random()*10+1);
+			int locationY = (int)(Math.random()*10+1);
+			int direction = (int)(Math.random()*2+1);
+			for(int x = 0; x < i; x++){
+				
+				boolean placing = true;
+				
+				
+			}
+			
+		}
+		
 		
 		System.out.println("RandBig: " + ((int)(Math.random()*100)+1) + " " + ((int)(Math.random()*100)+1));
 		System.out.println("RandSmall: " + ((int)(Math.random()*2)+1) + " " + ((int)(Math.random()*2)+1));
+	
+	
 	}
 	
 	public void printServerInfo(){
