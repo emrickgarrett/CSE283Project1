@@ -8,6 +8,15 @@ import java.net.UnknownHostException;
 import java.util.Random;
 
 
+/**
+ * 
+ * @author emrickgj
+ *
+ *
+ * The BattleshipServer is the Server end of the project. It handles the locations of the ship, 
+ * takes in guesses from a client, tells if it was a hit or not, and basically keeps track of the entire
+ * game. Upon the game ending, restarts and listens for another client.
+ */
 public class BattleshipServer {
 	
 	//Init Package scope variables
@@ -28,7 +37,12 @@ public class BattleshipServer {
 	private int[] board = new int[row*col];
 	
 	
-	//Enum for GameStatus
+	/**
+	 * 
+	 * @author emrickgj
+	 *
+	 * Enum type to store the different GameStatus' and their values
+	 */
 	public enum GameStatus{
 		
 		CONTINUE(10),
@@ -43,7 +57,13 @@ public class BattleshipServer {
 		
 	}
 	
-	//Enum for MoveStatus
+	/**
+	 * 
+	 * @author emrickgj
+	 *
+	 *
+	 * Enum type to store the different MoveStatus' and their values
+	 */
 	public enum MoveStatus{
 		
 		MISS(10),
@@ -58,6 +78,12 @@ public class BattleshipServer {
 		
 	}
 	
+	/**
+	 * 
+	 * @author emrickgj
+	 *
+	 * Enum type to store the Ships, their locations, their hits, and whether or not they have sunk
+	 */
 	public enum SHIP{
 		
 		BATTLESHIP(4),
@@ -77,7 +103,9 @@ public class BattleshipServer {
 	
 	
 	
-	
+	/**
+	 * Constructor for the Server, inits the server socket, prints out the server info, and starts the game loop
+	 */
 	public BattleshipServer(){
 		
 		initServerSocket();
@@ -86,6 +114,10 @@ public class BattleshipServer {
 		
 	}
 	
+	
+	/**
+	 * Loop that runs the Server end of the Battleship game
+	 */
 	private void gameLoop(){
 		
 		while(true){
@@ -95,7 +127,7 @@ public class BattleshipServer {
 			createStreams();
 			
 			
-			//Loop for playing the game!
+			//Loop for playing the game with a client!
 			while(inProgress){
 				listenForGuess();
 			}
@@ -105,6 +137,9 @@ public class BattleshipServer {
 		
 	}
 	
+	/**
+	 * Listens for a guess from the user
+	 */
 	private void listenForGuess(){
 		
 		int guess = -1;
@@ -140,10 +175,20 @@ public class BattleshipServer {
 		
 	}
 	
+	/**
+	 * Register a hit on said location
+	 * @param x : The x location
+	 * @param y : The y location
+	 */
 	public void registerHit(int x, int y){
-		
+		sendResponse(MoveStatus.HIT.id, GameStatus.CONTINUE.id);
 	}
 	
+	/**
+	 * Send a response to the client
+	 * @param moveStatus : The move status
+	 * @param gameStatus : The game status
+	 */
 	private void sendResponse(int moveStatus, int gameStatus){
 		
 		try{
@@ -155,6 +200,9 @@ public class BattleshipServer {
 		}
 	}
 	
+	/**
+	 * Close the streams with the client
+	 */
 	private void closeStreams(){
 		
 		try{
@@ -171,6 +219,9 @@ public class BattleshipServer {
 		client = null;
 	}
 	
+	/**
+	 * Listens for the client and accepts the incoming connection
+	 */
 	private void listenForClient(){
 		
 		try {
@@ -182,6 +233,9 @@ public class BattleshipServer {
 		
 	}
 	
+	/**
+	 * Creates all the streams for the server to the client
+	 */
 	private void createStreams(){
 		
 		try{
@@ -193,6 +247,9 @@ public class BattleshipServer {
 		}
 	}
 	
+	/**
+	 * Initialized the game board and places the new pieces
+	 */
 	private void initGameBoard(){
 		
 		for(int i = 0; i < row*col; i++){
@@ -214,12 +271,13 @@ public class BattleshipServer {
 	 * 
 	 */
 	private void placeShips(){
-		//Need to place 3 ships (Destroyer, Battleship, and Cruiser?)
 		
+		//Loop starts at 4 (BattleShip) and ends at 2 (Cruiser). Uses this value to also place them on board
 		for(int i = 4; i > 1; i--){
 			
-			
+			//Uses this variable to modify our ships down below
 			SHIP ship = null;
+			
 			//Determine which Ship it should use
 			switch(i){
 			case 4:
@@ -240,8 +298,10 @@ public class BattleshipServer {
 			int locationY = (int)(Math.random()*10+1);
 			int direction = (int)(Math.random()*2+1);
 			
+			//Should it place the ship, or restart the search
 			boolean shouldPlace = true;
 			
+			//Loop to find an acceptable location
 			for(int j = 0; j < i; j++){
 				
 				switch(direction){
@@ -263,6 +323,8 @@ public class BattleshipServer {
 				
 				
 			}
+			
+			//If it was an acceptable spot, add it!
 			if(shouldPlace)
 				for(int j = 0; j < i; j++){
 					switch(direction){
@@ -279,15 +341,20 @@ public class BattleshipServer {
 			//if(shouldPlace)
 			//System.out.println("Placed ship of size: " + ship.locations.length);
 			
-		}
-		
+			}//End inner loop
 			
-		}
+		}//End outer loop
+		
+		
+		
 		//Print the board now that all the ships have been placed
 		printBoard();
 	
 	}
 	
+	/**
+	 * Print out the servers info to the console, launches on startup of the server
+	 */
 	public void printServerInfo(){
 		// Display contact information.
 		try {
@@ -321,8 +388,10 @@ public class BattleshipServer {
 				else if(y > 0 && y < col+1 && x == 0){
 					System.out.print(y-1);
 				}
-				else {
-					System.out.print(board[(x-1)*row+(y-1)]);
+				else if(board[(x-1)*row+(y-1)] != 0){
+					System.out.print(board[(x-1)*row+(y-1)]);//Print out the value here
+				}else{
+					System.out.print("_");
 				}
 				
 				System.out.print("|\t");
@@ -332,6 +401,9 @@ public class BattleshipServer {
 		
 	}
 	
+	/**
+	 * Initializes the server socket to listen on the selected port
+	 */
 	private void initServerSocket(){
 		//Init the server socket
 		try {
@@ -342,28 +414,11 @@ public class BattleshipServer {
 		}
 	}
 	
-	/**
-	 * 
-	 * Method to store result, main reason is to "remind" one of the numbers/meanings.
-	 * Not necessary to use as we have access to the board
-	 * 
-	 * @param x : X location
-	 * @param y : Y location
-	 * @param result : Result to store (0 = Blank, 1 = Hit, 2 = Miss)
-	 */
-	private void storeResult(int x, int y, int result){
-		board[row * x + y] = result;
-	}
 	
-	private String getResult(int x, int y){
-		switch(board[row * x + y]){
-		case 0 : return "_";
-		case 1 : return "H";
-		case 2 : return "M";
-		default: return "_";
-		}
-	}
-
+    /**
+     * Main Method
+     * @param args
+     */
 	public static void main(String[] args) {
 		
 		new BattleshipServer();
