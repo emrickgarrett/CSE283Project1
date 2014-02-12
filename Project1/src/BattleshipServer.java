@@ -58,6 +58,23 @@ public class BattleshipServer {
 		
 	}
 	
+	public enum SHIP{
+		
+		BATTLESHIP(4),
+		CRUISER(3),
+		DESTROYER(2);
+		
+		int locations[];
+		int hits[];
+		boolean sank;
+		
+		SHIP(int size){
+			this.locations = new int[size];
+			this.hits = new int[size];
+			this.sank = false;
+		}
+	}
+	
 	
 	
 	
@@ -201,6 +218,24 @@ public class BattleshipServer {
 		
 		for(int i = 4; i > 1; i--){
 			
+			
+			SHIP ship = null;
+			//Determine which Ship it should use
+			switch(i){
+			case 4:
+				ship = SHIP.BATTLESHIP;
+				break;
+			case 3:
+				ship = SHIP.CRUISER;
+				break;
+			case 2:
+				ship = SHIP.DESTROYER;
+				break;
+			}
+			
+			
+			/** Start Placement **/
+			
 			int locationX = (int)(Math.random()*10+1);
 			int locationY = (int)(Math.random()*10+1);
 			int direction = (int)(Math.random()*2+1);
@@ -233,23 +268,23 @@ public class BattleshipServer {
 					switch(direction){
 					case 1: // Horizontal
 						board[(locationX+j)*row + locationY] = i;
+						ship.locations[j] = (locationX+j)*row + locationY;
 						break;
 					case 2: // Vertical
 						board[locationX*row + (locationY+j)] = i;
+						ship.locations[j] = locationX*row + (locationY+j);
 						break;
 					}
-				}
-			
-			System.out.println("Placed ship!");
+			/** DEBUGGING **/
+			//if(shouldPlace)
+			//System.out.println("Placed ship of size: " + ship.locations.length);
 			
 		}
 		
+			
+		}
+		//Print the board now that all the ships have been placed
 		printBoard();
-		
-		
-		System.out.println("RandBig: " + ((int)(Math.random()*100)+1) + " " + ((int)(Math.random()*100)+1));
-		System.out.println("RandSmall: " + ((int)(Math.random()*2)+1) + " " + ((int)(Math.random()*2)+1));
-	
 	
 	}
 	
