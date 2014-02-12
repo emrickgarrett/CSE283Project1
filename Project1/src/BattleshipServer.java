@@ -194,14 +194,47 @@ public class BattleshipServer {
 			int locationX = (int)(Math.random()*10+1);
 			int locationY = (int)(Math.random()*10+1);
 			int direction = (int)(Math.random()*2+1);
-			for(int x = 0; x < i; x++){
+			
+			boolean shouldPlace = true;
+			
+			for(int j = 0; j < i; j++){
 				
-				boolean placing = true;
+				switch(direction){
+				case 1: // Horizontal
+					if(locationX+j >= 10 || (locationX+j)*row+locationY >= 100 || board[(locationX+j)*row+locationY] != 0){
+						shouldPlace = false;
+						j = i;
+						i++;
+					}
+					break;
+				case 2: // Vertical
+					if(locationY+j >= 10 || locationX*row+(locationY+j) >= 100 || board[locationX*row+(locationY+j)] != 0){
+						shouldPlace = false;
+						j = i;
+						i++;
+					}
+					break;
+				}
 				
 				
 			}
+			if(shouldPlace)
+				for(int j = 0; j < i; j++){
+					switch(direction){
+					case 1: // Horizontal
+						board[(locationX+j)*row + locationY] = i;
+						break;
+					case 2: // Vertical
+						board[locationX*row + (locationY+j)] = i;
+						break;
+					}
+				}
+			
+			System.out.println("Placed ship!");
 			
 		}
+		
+		printBoard();
 		
 		
 		System.out.println("RandBig: " + ((int)(Math.random()*100)+1) + " " + ((int)(Math.random()*100)+1));
@@ -222,6 +255,36 @@ public class BattleshipServer {
 			System.err.println("Couldn't get local IP");
 			e.printStackTrace();
 		}	
+	}
+	
+/****************Game Loop Methods Below ******************/
+	
+	/**
+	 * Prints the board below, slightly different than what we had before, I wanted to 
+	 * give the user an easier way to identify the rows, and make the board a lot easier to see.
+	 */
+	private void printBoard(){
+		
+		for(int y = 0; y < col+1; y++){
+			for(int x = 0; x < row+1; x++){
+				if(x == 0 && y == 0){
+					System.out.print("#");
+				}
+				else if(x > 0 && x < row+1 && y == 0){
+					System.out.print(x-1);
+				}
+				else if(y > 0 && y < col+1 && x == 0){
+					System.out.print(y-1);
+				}
+				else {
+					System.out.print(board[(x-1)*row+(y-1)]);
+				}
+				
+				System.out.print("|\t");
+			}
+			System.out.println();
+		}
+		
 	}
 	
 	private void initServerSocket(){
