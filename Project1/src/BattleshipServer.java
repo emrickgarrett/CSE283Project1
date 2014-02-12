@@ -5,6 +5,7 @@ import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.Random;
 
 
 public class BattleshipServer {
@@ -98,10 +99,31 @@ public class BattleshipServer {
 			ex.printStackTrace();
 		}
 		
-		if(guess >= 100 || guess < 0){
-			sendResponse(MoveStatus.ILLEGAL_MOVE.id, GameStatus.ILLEGAL_MOVE.id);
+		//If the user is quitting the game
+		if(guess == -1){
 			inProgress = false;
 		}
+		
+		else if(guess >= 100 || guess <0){
+			sendResponse(MoveStatus.ILLEGAL_MOVE.id, GameStatus.ILLEGAL_MOVE.id);
+			inProgress = false;
+			return;
+		}
+		
+		//The user made a guess that can be applied to the game!
+		else{
+			int y = guess/col;
+			int x = guess%row;
+			
+			registerHit(x, y);
+			
+			//Test to make sure it is printing out the correct input
+			//System.out.print("X: " + x + " Y: " + y);
+		}
+		
+	}
+	
+	public void registerHit(int x, int y){
 		
 	}
 	
@@ -160,6 +182,16 @@ public class BattleshipServer {
 			board[i] = 0;
 		}
 		
+		
+		placeShips();
+	}
+	
+	private void placeShips(){
+		//Need to place 3 ships (Destroyer, Battleship, and Cruiser?)
+		Random randSmall = new Random(2);
+		
+		System.out.println("RandBig: " + ((int)(Math.random()*100)+1) + " " + ((int)(Math.random()*100)+1));
+		System.out.println("RandSmall: " + ((int)(Math.random()*2)+1) + " " + ((int)(Math.random()*2)+1));
 	}
 	
 	public void printServerInfo(){

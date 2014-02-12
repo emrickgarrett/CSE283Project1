@@ -206,6 +206,15 @@ public class BattleshipClient {
 	private void quitGame(){
 		System.out.println("Thank you for playing, Come again!");
 		inProgress = false;
+		
+		
+		//Message the server letting it know you have quit the game!
+		try{
+			dos.writeInt(-1);
+		}catch(IOException ex){
+			System.err.println("Error messaging the server to quit");
+			ex.printStackTrace();
+		}
 	}
 	
 	
