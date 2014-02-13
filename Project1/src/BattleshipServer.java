@@ -101,6 +101,12 @@ public class BattleshipServer {
 			this.hits = new ArrayList<Integer>();
 			this.sank = false;
 		}
+		
+		void reset(){
+			this.locations = new ArrayList<Integer>();
+			this.hits = new ArrayList<Integer>();
+			this.sank = false;
+		}
 	}
 	
 	
@@ -135,6 +141,9 @@ public class BattleshipServer {
 			}
 			closeStreams();
 			inProgress = true;
+			SHIP.BATTLESHIP.reset();
+			SHIP.CRUISER.reset();
+			SHIP.DESTROYER.reset();
 			numGuesses = 0;
 		}
 		
@@ -199,8 +208,12 @@ public class BattleshipServer {
 			ship = SHIP.DESTROYER;
 			break;
 		default:
-			sendResponse(MoveStatus.MISS.id, GameStatus.CONTINUE.id);
 			numGuesses++;
+			if(numGuesses >= 25){
+				sendResponse(MoveStatus.MISS.id, GameStatus.CLIENT_LOST.id);
+				inProgress = false;
+			}else
+				sendResponse(MoveStatus.MISS.id, GameStatus.CONTINUE.id);
 			return;
 		}
 
@@ -211,6 +224,7 @@ public class BattleshipServer {
 			if(ship.locations.contains(x*row+y)){
 				//Ship was hit
 				ship.hits.add(x*row+y);
+				System.out.println("HitHITIHTITIHTI" + ship.hits.size());
 				if(ship.hits.size() == ship.locations.size()){
 					ship.sank = true;
 					

@@ -179,6 +179,7 @@ public class BattleshipClient {
 			System.out.println("Hit!");
 			break;
 		case 30:
+			board[row*t_row + t_col] = 1;
 			printBoard();
 			System.out.println("Sink!");
 			break;
